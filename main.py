@@ -1,28 +1,15 @@
-import ftplib
-import os
+import socket
 
-host = input('Введите FTP сервер к которому хотите подключиться!\n')
-user = input('Введите имя пользователя!\n')
-password = input('Введите пароль!\n')
+ip   = "127.0.0.1"
+port = 5678
 
-ftp = ftplib.FTP(host)
-output = ftp.login(user, password)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+s.connect((ip,port))
 
-if '230' in output:
-    print('Подключение к серверу установлено!')
 
-print(ftp.pwd())
-
-while True:
-    cmd = input()
-    if 'cd' or 'cwd' in cmd:
-        space = cmd.find(' ')
-        ftp.cwd(cmd[space+1:])
-        print(ftp.pwd())
-    if cmd == 'pwd':
-        print(ftp.pwd())
-    if cmd == 'dir' or cmd == 'ls':
-        print(ftp.dir())
-    if cmd == 'exit' or cmd == 'close':
-        ftp.close()
-        print('Соединение с сервером закрыто!')
+print(f"Соединение с {ip} установлено...")
+file = open('Transfer.txt', 'rb')
+s.sendfile(file)
+file.close()
+print("Файл передан!")
