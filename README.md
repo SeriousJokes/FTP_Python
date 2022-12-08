@@ -14,4 +14,5 @@
 
 
 # FTP_Python
-Simple FTP client written on Python with ftplib
+FTP Client and FTP Server which can transfer files
+to each other. Rewritten with SOCKET library.
